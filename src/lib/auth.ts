@@ -10,33 +10,43 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: {},
         password: {},
       },
-      authorize: async (credentials) => {
-
-        const isUserExists = await prisma.user.findFirst({
-          where: {
-            email: credentials?.email as string,
-          },
-        });
-
-        if (!isUserExists) {
-          throw new Error("No User Found with given Email.");
-        }
-
-        const isPasswordMatched = compare(
-          credentials?.password as string,
-          isUserExists.password
-        );
-
-        if (!isPasswordMatched) {
-          throw new Error("Invalid credentials.");
-        }
-
-        return {
-          id: isUserExists.id,
-          email: isUserExists.email,
-          name: isUserExists.name,
-        };
-      },
     }),
   ],
+  callbacks: {
+    async signIn({ credentials }) {
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          email: credentials?.email as string,
+        },
+      });
+
+      if (!existingUser) {
+        return false;
+      }
+
+      const isPasswordValid = compare(
+        existingUser.password,
+        credentials?.password as string
+      );
+
+      if (!isPasswordValid) {
+        return false;
+      }
+
+      return true;
+    },
+  },
+  async jwt({ token, user }) {
+    token.id = user?._id;
+
+    return token;
+  },
+  async session({ session, token }) {
+    Object.assign(session, { id: token.id });
+    return session;
+  },
+  pages: {
+    newUser: "/signup",
+    signIn: "/login",
+  },
 });
