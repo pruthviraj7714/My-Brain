@@ -1,7 +1,7 @@
 
 export default function Home() {
   return (
-    <div>
+    <div className="bg-[#312e81] min-h-screen">
       second brain landing page
     </div>
   );
