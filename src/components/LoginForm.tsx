@@ -22,48 +22,52 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { toast } from "sonner";
-import axios from 'axios';
+import { signIn } from "@/lib/auth";
 import { useRouter } from "next/navigation";
-const signUpformSchema = z.object({
+
+const loginFormSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  email: z.string().email({ message: "The email must be valid." }),
   password: z
     .string()
     .min(6, { message: "The password must be at least of 6 characters" }),
 });
-
-export default function SignUpForm() {
+export default function LoginForm() {
   const router = useRouter();
-  const form = useForm<z.infer<typeof signUpformSchema>>({
-    resolver: zodResolver(signUpformSchema),
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       username: "",
-      email: "",
       password: "",
     },
   });
 
-
-  async function onSubmit(values: z.infer<typeof signUpformSchema>) {
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
-      await axios.post('/api/auth/signup', values);
-      toast.success("Successfully Signed Up", {description : "Now Login with your credentials"})
-      router.push('/login');
+      const res = await signIn('credentials', {
+        username : values.username,
+        password : values.password,
+        redirect : false
+      });
+      console.log(res);
+      if(res?.ok) {
+        router.push('/home');
+      }
     } catch (error : any) {
-      toast.error(error.response.data.message);
+      console.log(error);
+      toast.error(error.message);
     }
   }
-
+  
   return (
     <Card className="max-w-lg w-full">
       <CardHeader>
         <CardTitle className="text-center text-3xl font-bold text-purple-500">
-          Welcome, to Second Brain
+        Welcome back
         </CardTitle>
         <CardDescription className="text-center text-lg">
-          Join Second Brain, Today
+        Enter your email to sign in to your account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -77,19 +81,6 @@ export default function SignUpForm() {
                   <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter username here" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter email here" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -112,18 +103,18 @@ export default function SignUpForm() {
                 </FormItem>
               )}
             />
-            <Button className="bg-[#8b5cf6] hover:bg-[#7c3aed] font-bold w-full" type="submit">
-              Sign up
+            <Button
+              className="bg-[#8b5cf6] hover:bg-[#7c3aed] font-bold w-full"
+              type="submit"
+            >
+              Log in
             </Button>
           </form>
         </Form>
         <div className="flex flex-col mt-5 gap-y-4 font-serif text-sm text-center max-w-md leading-tight">
-          <span>
-            By signing-up, you are agreeing to our{" "}
-            <span className="underline text-blue-500 cursor-pointer">Terms of Service</span> and{" "}
-            <span className="underline text-blue-500 cursor-pointer">Privacy Policy.</span>
-          </span>
-          <Link href={'/login'} className="underline text-pretty">Already have an account? Log in</Link>
+          <Link href={"/signup"} className="underline text-pretty">
+            Don&apos;t have an account? Sign up
+          </Link>
         </div>
       </CardContent>
     </Card>

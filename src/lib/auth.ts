@@ -1,14 +1,14 @@
-import NextAuth from "next-auth";
+import NextAuth, { JWT, Session, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prisma from "./db";
-import { compare, hash } from "bcrypt";
+import { compare} from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       credentials: {
-        email: {},
-        password: {},
+        email: {type : "username", label : "username"},
+        password: {type : "password", label : "password"},
       },
     }),
   ],
@@ -16,7 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ credentials }) {
       const existingUser = await prisma.user.findFirst({
         where: {
-          email: credentials?.email as string,
+          username: credentials?.username as string,
         },
       });
 
@@ -24,9 +24,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return false;
       }
 
-      const isPasswordValid = compare(
-        existingUser.password,
-        credentials?.password as string
+      const isPasswordValid = await compare(
+        credentials?.password as string,
+        existingUser.password
       );
 
       if (!isPasswordValid) {
@@ -36,12 +36,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true;
     },
   },
-  async jwt({ token, user }) {
-    token.id = user?._id;
+  //@ts-ignore
+  async jwt({ token, user } : {token : JWT, user : User})  {
+    token.id = user?.id as string;
 
     return token;
   },
-  async session({ session, token }) {
+  //@ts-ignore
+  async session({ session, token } : { session : Session, token : JWT}) {
     Object.assign(session, { id: token.id });
     return session;
   },
