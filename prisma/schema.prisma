@@ -14,8 +14,35 @@ datasource db {
 }
 
 model User {
-  id    Int       @id @default(autoincrement())
-  email String    @unique
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
   password String
-  username    String
+  username String
+  content  Content[]
+  link     Link?
+}
+
+model Content {
+  id          String      @id @default(uuid())
+  title       String
+  contentType ContentType
+  link        String
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id])
+}
+
+model Link {
+  id     String @id @default(uuid())
+  hash   String
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId])
+}
+
+enum ContentType {
+  TWEET
+  YOUTUBE
+  NOTION
+  IMAGE
 }
