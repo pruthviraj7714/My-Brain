@@ -5,12 +5,7 @@ import { compare} from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    Credentials({
-      credentials: {
-        email: {type : "username", label : "username"},
-        password: {type : "password", label : "password"},
-      },
-    }),
+    
   ],
   callbacks: {
     async signIn({ credentials }) {
