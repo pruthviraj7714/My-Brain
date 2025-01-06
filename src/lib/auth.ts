@@ -1,12 +1,10 @@
 import NextAuth, { JWT, Session, User } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import GitHub from "next-auth/providers/github";
 import prisma from "./db";
-import { compare} from "bcryptjs";
+import { compare } from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [
-    
-  ],
+  providers: [GitHub],
   callbacks: {
     async signIn({ credentials }) {
       const existingUser = await prisma.user.findFirst({
@@ -32,18 +30,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   //@ts-ignore
-  async jwt({ token, user } : {token : JWT, user : User})  {
+  async jwt({ token, user }: { token: JWT; user: User }) {
     token.id = user?.id as string;
 
     return token;
   },
   //@ts-ignore
-  async session({ session, token } : { session : Session, token : JWT}) {
+  async session({ session, token }: { session: Session; token: JWT }) {
     Object.assign(session, { id: token.id });
     return session;
-  },
-  pages: {
-    newUser: "/signup",
-    signIn: "/login",
   },
 });
