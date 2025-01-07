@@ -1,42 +1,49 @@
-import NextAuth, { JWT, Session, User } from "next-auth";
+import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import prisma from "./db";
-import { compare } from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [GitHub],
   callbacks: {
-    async signIn({ credentials }) {
+    async signIn({
+      user: { name, email, image },
+      //@ts-ignore
+      profile : { id, login } ,
+    }) {
       const existingUser = await prisma.user.findFirst({
         where: {
-          username: credentials?.username as string,
+          id,
         },
       });
 
-      if (!existingUser) {
-        return false;
+      if(!existingUser) {
+        await prisma.user.create({
+          data: {
+            username : login as string,
+          },
+        });
       }
 
-      const isPasswordValid = await compare(
-        credentials?.password as string,
-        existingUser.password
-      );
-
-      if (!isPasswordValid) {
-        return false;
-      }
 
       return true;
     },
   },
   //@ts-ignore
-  async jwt({ token, user }: { token: JWT; user: User }) {
-    token.id = user?.id as string;
+  async jwt({ token, account, profile }) {
+    if (account && profile) {
+      const user = await prisma.user.findFirst({
+        where : {
+          id : profile.id
+        }
+      })
+  
+      token.id = user?.id;
+    }
 
     return token;
   },
   //@ts-ignore
-  async session({ session, token }: { session: Session; token: JWT }) {
+  async session({ session, token }) {
     Object.assign(session, { id: token.id });
     return session;
   },

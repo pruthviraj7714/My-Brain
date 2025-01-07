@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { FileText, Image, Twitter, Youtube } from "lucide-react";
+import { FileText, Github, Image, Twitter, Youtube } from "lucide-react";
+import { signIn } from "@/lib/auth";
 
 const features = [
   {
@@ -54,7 +55,7 @@ export default function Home() {
       </header>
       <main>
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/10 to-secondary/10">
-          <div className=" mx-auto text-center">
+          <div className="mx-auto text-center flex flex-col justify-center items-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary mb-6">
               Your Digital Second Brain
             </h1>
@@ -62,9 +63,16 @@ export default function Home() {
               Store, organize, and access all your important links in one place.
               Never lose a valuable resource again.
             </p>
-            <Button size="lg" className="text-lg px-8">
-              Get Started
-            </Button>
+            <form
+              action={async () => {
+                "use server";
+                await signIn("github", {redirectTo : '/home'});
+              }}
+            >
+              <Button type="submit" size="lg" className="text-lg px-10">
+                Login With Github <Github className="size-10" />
+              </Button>
+            </form>
           </div>
         </section>
         <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
