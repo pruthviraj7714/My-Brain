@@ -14,8 +14,9 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  username String
+  id       String       @id @default(uuid())
+  username String        @unique
+  photo    String?
   content  Content[]
   link     Link?
 }
@@ -25,14 +26,15 @@ model Content {
   title       String
   contentType ContentType
   link        String
-  userId      Int
+  userId      String
+  createdAt   DateTime  @default(now())
   user        User        @relation(fields: [userId], references: [id])
 }
 
 model Link {
   id     String @id @default(uuid())
   hash   String
-  userId Int
+  userId String
   user   User   @relation(fields: [userId], references: [id])
 
   @@unique([userId])
