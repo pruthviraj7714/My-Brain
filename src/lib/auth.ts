@@ -9,11 +9,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user }) {
       const isUserExist = await prisma.user.findUnique({
         where: {
-        username: user.name as string,
+          username: user.name as string,
         },
       });
-      
-      
+
       if (!isUserExist) {
         await prisma.user.create({
           data: {
@@ -28,7 +27,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     //@ts-ignore
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        const dbUser = await prisma.user.findUnique({
+          where: {
+            username: user.name as string,
+          },
+        });
+        token.id = dbUser?.id;
       }
       return token;
     },
