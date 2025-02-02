@@ -1,10 +1,11 @@
 "use client";
+
 import { deleteContent } from "@/api/mutations/content";
 import { fetchContent } from "@/api/queries/content";
-import { Button } from "@/components/ui/button";
-import { ContentProps } from "@/types/types";
+import ContentCard from "@/components/ContentCard";
+import type { ContentProps } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { LucideLoader2 } from "lucide-react";
+import { Loader2, Image } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Home() {
@@ -15,7 +16,7 @@ export default function Home() {
     queryFn: fetchContent,
   });
 
-  const { mutateAsync, isError, isPending } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ["content-delete"],
     mutationFn: deleteContent,
     onSuccess: () => {
@@ -30,56 +31,30 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <LucideLoader2 className="animate-spin size-7" />
+        <Loader2 className="animate-spin w-12 h-12 text-primary" />
       </div>
     );
   }
 
-  if (isError) {
-    return <div>Error while fetching content</div>;
-  }
-
   return (
-    <div>
+    <div className="bg-gray-900 p-6">
       {contents && contents.length > 0 ? (
-        <div className="grid grid-cols-4 gap-4">
-          {contents.map((c: ContentProps) => (
-            <div key={c.id} className="flex flex-col">
-              <div className="h-60 w-30">
-                {c.contentType === "IMAGE" ? (
-                  <img
-                    src={c.link}
-                    alt={c.title}
-                    className="h-full w-full object-cover"
-                  />
-                ) : c.contentType === "YOUTUBE" ? (
-                  <iframe
-                    className="w-full"
-                    src={c.link.replace("watch", "embed").replace("?v=", "/")}
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allowFullScreen
-                  ></iframe>
-                ) : c.contentType === "NOTION" ? (
-                  <img src="" alt="" />
-                ) : (
-                  <blockquote className="twitter-tweet">
-                    <a href={c.link}></a>
-                  </blockquote>
-                )}
-              </div>
-              <Button
-                onClick={() => mutateAsync({ contentId: c.id })}
-                variant={"destructive"}
-              >
-                Delete
-              </Button>
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 bg-gray-950">
+          {contents.map((content: ContentProps) => (
+            <ContentCard
+              content={content}
+              isPending={isPending}
+              onDelete={mutateAsync}
+              key={content.id}
+            />
           ))}
         </div>
       ) : (
-        <div>No Content Added yet</div>
+        <div className="text-center text-gray-500 mt-12">
+          <Image className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+          <p className="text-xl font-semibold">No Content Added Yet</p>
+          <p className="mt-2">Start by adding some content to your gallery!</p>
+        </div>
       )}
     </div>
   );

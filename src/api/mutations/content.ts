@@ -6,7 +6,7 @@ export const addContent = async ({
   link,
 }: {
   title: string;
-  contentType: "TWEET" | "YOUTUBE" | "NOTION" | "IMAGE";
+  contentType: "TWEET" | "YOUTUBE" | "IMAGE";
   link: string;
 }) => {
   const { data } = await axios.post("/api/add-content", {

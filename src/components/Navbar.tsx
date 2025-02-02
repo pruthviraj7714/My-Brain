@@ -40,12 +40,12 @@ const addContentSchema = z.object({
     .string()
     .min(3, { message: "The Title Should be at least of 3 characters" }),
   link: z.string().url({ message: "The Link should be valid URL" }),
-  contentType: z.enum(["TWEET", "IMAGE", "NOTION", "YOUTUBE"], {
+  contentType: z.enum(["TWEET", "IMAGE", "YOUTUBE"], {
     message: "Content Type Must Be Selected",
   }),
 });
 
-const contentTypes = ["TWEET", "IMAGE", "NOTION", "YOUTUBE"];
+const contentTypes = ["TWEET", "IMAGE", "YOUTUBE"];
 
 export default function Navbar() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
