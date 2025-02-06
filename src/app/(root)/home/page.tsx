@@ -30,20 +30,19 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="animate-spin w-12 h-12 text-primary" />
+      <div className="flex items-center justify-center bg-gradient-to-b from-gray-900 via-blue-950 to-black min-h-screen">
+        <Loader2 className="animate-spin w-12 h-12 text-white" />
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-900 p-6">
+    <div className="bg-gradient-to-b from-gray-900 via-blue-950 to-black p-6 min-h-screen">
       {contents && contents.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 bg-gray-950">
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 space-y-6 gap-6">
           {contents.map((content: ContentProps) => (
             <ContentCard
               content={content}
-              isPending={isPending}
               onDelete={mutateAsync}
               key={content.id}
             />

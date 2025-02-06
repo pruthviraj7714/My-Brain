@@ -33,7 +33,7 @@ import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { logOut } from "@/actions/logout";
+import { signOut } from "@/lib/auth";
 
 const addContentSchema = z.object({
   title: z
@@ -49,6 +49,7 @@ const contentTypes = ["TWEET", "IMAGE", "YOUTUBE"];
 
 export default function Navbar() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof addContentSchema>>({
@@ -79,7 +80,7 @@ export default function Navbar() {
   });
 
   return (
-    <nav className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg">
+    <nav className="bg-gradient-to-r from-gray-700 via-blue-750 to-cyan-700 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-2 lg:px-3">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
@@ -88,15 +89,15 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-white text-violet-600 hover:bg-violet-100 transition-colors duration-200 flex items-center gap-2">
+                <Button className="bg-purple-600 hover:bg-purple-500 text-white text-md font-medium transition-colors duration-200 flex items-center gap-2">
                   <PlusIcon size={18} />
                   <span>Add Content</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className="bg-gradient-to-b from-gray-900 via-blue-950 to-black text-white sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>Add New Content</DialogTitle>
-                  <DialogDescription>
+                  <DialogDescription className="text-white">
                     Add new content to your Second Brain. Fill in the details
                     below.
                   </DialogDescription>
@@ -115,6 +116,7 @@ export default function Navbar() {
                             <FormLabel>Title</FormLabel>
                             <FormControl>
                               <Input
+                                className="text-black"
                                 placeholder="Enter Title for content"
                                 {...field}
                               />
@@ -131,6 +133,7 @@ export default function Navbar() {
                             <FormLabel>Link</FormLabel>
                             <FormControl>
                               <Input
+                                className="text-black"
                                 placeholder="Enter URL of content"
                                 {...field}
                               />
@@ -150,7 +153,7 @@ export default function Navbar() {
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
                               >
-                                <SelectTrigger className="w-[180px]">
+                                <SelectTrigger className="w-[180px] text-black">
                                   <SelectValue placeholder="Select Content Type" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -168,7 +171,7 @@ export default function Navbar() {
                       />
                       <Button
                         type="submit"
-                        className="bg-violet-600 hover:bg-violet-700 text-white transition-colors duration-200"
+                        className="text-white bg-purple-900 hover:bg-purple-950 transition-colors duration-200"
                       >
                         Add Content
                       </Button>
@@ -178,21 +181,48 @@ export default function Navbar() {
               </DialogContent>
             </Dialog>
 
-            <Button className="bg-white text-violet-600 hover:bg-violet-100 transition-colors duration-200 flex items-center gap-2">
-              <Share2Icon size={18} />
-              <span>Share Brain</span>
-            </Button>
-            <form
-             action={() => logOut()}
+            <Dialog
+              open={isShareDialogOpen}
+              onOpenChange={setIsShareDialogOpen}
             >
-              <Button
-                variant="ghost"
-                className="hover:bg-violet-700 transition-colors duration-200 flex items-center gap-2"
-              >
-                <LogOutIcon size={18} />
-                <span>Logout</span>
-              </Button>
-            </form>
+              <DialogTrigger asChild>
+                <Button className="bg-purple-600 hover:bg-purple-500 text-md font-medium transition-colors duration-200 flex items-center gap-2">
+                  <Share2Icon size={18} />
+                  <span>Share Brain</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-gradient-to-b from-gray-900 via-blue-950 to-black text-white sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>
+                    Share your second brain with your friends!
+                  </DialogTitle>
+                  <DialogDescription className="text-white">
+                    Copy the below URL and share to your friends
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex justify-between items-center gap-2">
+                  <Input value={window.location.origin} className="p-4 text-black font-semibold" readOnly />
+                  <Button
+                    onClick={() => {
+                      navigator.clipboard.writeText("Hi there");
+                      toast.success("Copied to clipboard");
+                    }}
+                    className="bg-purple-600 hover:bg-purple-500 text-md font-medium"
+                  >
+                    Copy
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Button
+              onClick={() => signOut()}
+              variant={"destructive"}
+              className=" transition-colors duration-200 flex items-center gap-2"
+            >
+              <LogOutIcon size={18} />
+              <span>Logout</span>
+            </Button>
           </div>
         </div>
       </div>

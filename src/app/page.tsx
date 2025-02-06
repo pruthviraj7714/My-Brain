@@ -5,58 +5,62 @@ import { signIn } from "@/lib/auth";
 
 const features = [
   {
-    icon: <Twitter className="h-10 w-10 text-primary" />,
+    icon: <Twitter className="h-10 w-10 text-white" />,
     title: "Tweet Links",
     description: "Save and organize important tweets for future reference.",
   },
   {
-    icon: <Youtube className="h-10 w-10 text-primary" />,
+    icon: <Youtube className="h-10 w-10 text-white" />,
     title: "YouTube Videos",
     description: "Store links to educational videos and tutorials.",
   },
   {
-    icon: <Image className="h-10 w-10 text-primary" />,
+    icon: <Image className="h-10 w-10 text-white" />,
     title: "Image Links",
     description: "Keep track of inspiring images and visual resources.",
   },
   {
-    icon: <FileText className="h-10 w-10 text-primary" />,
+    icon: <FileText className="h-10 w-10 text-white" />,
     title: "Notion Docs",
     description: "Link your Notion documents for easy access.",
   },
 ];
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col bg-gradient-to-b from-gray-900 via-blue-950 to-black text-white  min-h-screen">
       <header className="py-4 px-4 sm:px-6 lg:px-8">
         <div className=" mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-primary">
+          <Link href="/" className="text-2xl font-bold text-white">
             SecondBrain
           </Link>
           <nav className="hidden md:flex space-x-4">
             <Link
               href="#features"
-              className="text-muted-foreground hover:text-primary"
+              className="text-muted-foreground hover:text-white"
             >
               Features
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary">
+            <Link href="#" className="text-muted-foreground hover:text-white">
               Pricing
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary">
+            <Link href="#" className="text-muted-foreground hover:text-white">
               About
             </Link>
           </nav>
           <div className="flex space-x-2">
-            <Button variant="outline">Log in</Button>
-            <Button>Sign up</Button>
+            <Button variant={"outline"} className="text-black">
+              Log in
+            </Button>
+            <Button variant={"outline"} className="text-black">
+              Sign up
+            </Button>
           </div>
         </div>
       </header>
       <main>
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/10 to-secondary/10">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-white/10 to-secondary/10">
           <div className="mx-auto text-center flex flex-col justify-center items-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-primary mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6">
               Your Digital Second Brain
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -66,10 +70,14 @@ export default function Home() {
             <form
               action={async () => {
                 "use server";
-                await signIn("github", {redirectTo : '/home'});
+                await signIn("github", { redirectTo: "/home" });
               }}
             >
-              <Button type="submit" size="lg" className="text-lg px-10">
+              <Button
+                type="submit"
+                size="lg"
+                className="text-lg px-10 bg-white text-black hover:bg-white"
+              >
                 Login With Github <Github className="size-10" />
               </Button>
             </form>
@@ -96,7 +104,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary text-primary-foreground">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 text-white-foreground">
           <div className=" mx-auto text-center">
             <h2 className="text-3xl font-bold mb-4">
               Ready to Organize Your Digital Life?
@@ -111,7 +119,7 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="py-8 px-4 sm:px-6 lg:px-8 bg-muted">
+      <footer className="py-8 px-4 sm:px-6 lg:px-8">
         <div className=" mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="text-center md:text-left mb-4 md:mb-0">
             <p className="text-sm text-muted-foreground">
@@ -121,19 +129,19 @@ export default function Home() {
           <nav className="flex space-x-4">
             <Link
               href="#"
-              className="text-sm text-muted-foreground hover:text-primary"
+              className="text-sm text-muted-foreground hover:text-white"
             >
               Privacy Policy
             </Link>
             <Link
               href="#"
-              className="text-sm text-muted-foreground hover:text-primary"
+              className="text-sm text-muted-foreground hover:text-white"
             >
               Terms of Service
             </Link>
             <Link
               href="#"
-              className="text-sm text-muted-foreground hover:text-primary"
+              className="text-sm text-muted-foreground hover:text-white"
             >
               Contact Us
             </Link>
