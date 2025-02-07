@@ -18,7 +18,6 @@ model User {
   username String        @unique
   photo    String?
   content  Content[]
-  link     Link?
 }
 
 model Content {
@@ -29,15 +28,6 @@ model Content {
   userId      String
   createdAt   DateTime  @default(now())
   user        User        @relation(fields: [userId], references: [id])
-}
-
-model Link {
-  id     String @id @default(uuid())
-  hash   String
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  @@unique([userId])
 }
 
 enum ContentType {

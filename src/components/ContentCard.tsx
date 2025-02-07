@@ -1,11 +1,7 @@
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import type { ContentProps } from "@/types/types";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tweet } from "react-tweet";
 import { Trash2 } from "lucide-react";
 
@@ -14,7 +10,7 @@ const ContentCard = ({
   onDelete,
 }: {
   content: ContentProps;
-  onDelete: ({ contentId }: { contentId: string }) => void;
+  onDelete?: ({ contentId }: { contentId: string }) => void;
 }) => {
   const GRADIENTS = [
     "from-sky-300 to-blue-400",
@@ -24,9 +20,11 @@ const ContentCard = ({
     "from-fuchsia-300 to-pink-400",
   ];
 
-  const [gradient] = useState(
-    GRADIENTS[Math.floor(Math.random() * GRADIENTS.length)]
-  );
+  const [gradient, setGradient] = useState<string>("");
+
+  useEffect(() => {
+    setGradient(GRADIENTS[Math.floor(Math.random() * GRADIENTS.length)]);
+  }, []);
 
   return (
     <Card
@@ -41,10 +39,12 @@ const ContentCard = ({
               stored on: {new Date(content.createdAt).toLocaleDateString()}
             </span>
           </div>
-          <Trash2
-            onClick={() => onDelete({ contentId: content.id })}
-            className="transition-all duration-300 size-7 cursor-pointer text-red-500 rounded-xl"
-          />
+          {onDelete && (
+            <Trash2
+              onClick={() => onDelete({ contentId: content.id })}
+              className="transition-all duration-300 size-7 cursor-pointer text-red-500 rounded-xl"
+            />
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">

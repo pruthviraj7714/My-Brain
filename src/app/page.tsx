@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { FileText, Github, Image, Twitter, Youtube } from "lucide-react";
+import { Brain, FileText, Github, Image, Twitter, Youtube } from "lucide-react";
 import { signIn } from "@/lib/auth";
 
 const features = [
@@ -30,8 +30,9 @@ export default function Home() {
     <div className="flex flex-col bg-gradient-to-b from-gray-900 via-blue-950 to-black text-white  min-h-screen">
       <header className="py-4 px-4 sm:px-6 lg:px-8">
         <div className=" mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-white">
-            SecondBrain
+          <Link href="/" className="flex gap-1 text-2xl font-bold text-white">
+            <Brain className="mr-2 h-8 w-8" />
+            Brain Gallery
           </Link>
           <nav className="hidden md:flex space-x-4">
             <Link
@@ -111,7 +112,7 @@ export default function Home() {
             </h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto">
               Join thousands of users who have transformed their productivity
-              with SecondBrain.
+              with Brain Gallery.
             </p>
             <Button size="lg" variant="secondary" className="text-lg px-8">
               Start for Free
@@ -123,7 +124,7 @@ export default function Home() {
         <div className=" mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="text-center md:text-left mb-4 md:mb-0">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} SecondBrain. All rights reserved.
+              © {new Date().getFullYear()} Brain Gallery. All rights reserved.
             </p>
           </div>
           <nav className="flex space-x-4">
