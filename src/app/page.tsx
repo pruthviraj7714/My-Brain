@@ -37,14 +37,14 @@ export default function Home() {
           <nav className="hidden md:flex space-x-4">
             <Link
               href="#features"
-              className="text-muted-foreground hover:text-white"
+              className="text-slate-300 hover:text-white"
             >
               Features
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-white">
+            <Link href="#" className="text-slate-300 hover:text-white">
               Pricing
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-white">
+            <Link href="#" className="text-slate-300 hover:text-white">
               About
             </Link>
           </nav>
@@ -64,7 +64,7 @@ export default function Home() {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6">
               Your Digital Second Brain
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
               Store, organize, and access all your important links in one place.
               Never lose a valuable resource again.
             </p>
@@ -99,7 +99,7 @@ export default function Home() {
                   <h3 className="text-xl font-semibold mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
+                  <p className="text-slate-300">{feature.description}</p>
                 </div>
               ))}
             </div>

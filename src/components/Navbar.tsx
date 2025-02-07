@@ -90,8 +90,8 @@ export default function Navbar() {
             href={`${session?.data?.user ? "/home" : "/"}`}
             className="flex-shrink-0 flex items-center cursor-pointer"
           >
-            <h1 className="text-3xl font-bold text-white flex items-center">
-              <Brain className="mr-2 h-8 w-8" />
+            <h1 className="text-2xl font-bold text-white flex items-center">
+              <Brain className="mr-2 h-6 w-6" />
               Brain Gallery
             </h1>
           </Link>
